@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Queda em setembro",
+    "question": "O que explica a queda na receita de setembro?",
+    "months": ["2025-08", "2025-09"],
+    "tools": ["compare", "category", "region"],
+    "answer": "A receita caiu R$ 200,00 (20%) entre agosto e setembro. Eletrônicos contribuiu com R$ 150,00, ou 75% da queda, e Papelaria com os R$ 50,00 restantes. Os pedidos passaram de 10 para 8, com ticket médio de R$ 100,00 nos dois meses."
+  },
+  {
+    "title": "Crescimento em outubro",
+    "question": "A receita subiu em outubro por volume ou ticket médio?",
+    "months": ["2025-09", "2025-10"],
+    "tools": ["compare"],
+    "answer": "A receita cresceu R$ 200,00 (25%) em outubro. Foram 10 pedidos, contra 8 em setembro. O ticket médio permaneceu em R$ 100,00, então o aumento coincide com o maior volume de pedidos."
+  },
+  {
+    "title": "Novembro sem dados",
+    "question": "Como a receita de novembro se compara à de outubro?",
+    "months": ["2025-10", "2025-11"],
+    "tools": ["compare"],
+    "answer": "Sem registros para novembro de 2025. A comparação com outubro está indisponível."
+  }
+]

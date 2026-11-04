@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nexo Dados</title>
+  <link rel="icon" type="image/svg+xml" href="/nexo.svg">
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    try {
+      const preference = localStorage.getItem("nexo-theme");
+      if (preference === "light" || preference === "dark") document.documentElement.dataset.theme = preference;
+    } catch {}
+  </script>
+  <script src="/dashboard.js" defer></script>
+  <script src="/tabular.js" defer></script>
+  <script src="/ai-settings.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Ir para o conteúdo</a>
+  <aside class="masthead">
+    <a class="brand" href="/">
+      <img src="/nexo.svg" width="34" height="34" alt="">
+      <span>Nexo Dados</span>
+    </a>
+    <nav aria-label="Áreas de análise">
+      <a href="#workspace">Explorar dados</a>
+      <a href="#sales">Investigar vendas</a>
+      <a href="#ai-settings">Configuração de IA</a>
+    </nav>
+    <button type="button" id="theme-toggle" class="theme-toggle">
+      <svg class="moon" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 15A8.8 8.8 0 0 1 9 3.5 9 9 0 1 0 20.5 15Z"/></svg>
+      <svg class="sun" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+      <span id="theme-label">Modo escuro</span>
+    </button>
+  </aside>
+  <main class="shell" id="workspace" tabindex="-1">
+    <section id="ai-settings" aria-labelledby="ai-title">
+      <header class="intro">
+        <h1 id="ai-title">Configuração de IA</h1>
+        <p>Escolha o provedor e teste o modelo antes de usar as funções de IA.</p>
+      </header>
+      <form id="ai-form" class="panel">
+        <div class="controls">
+          <div><label for="ai-provider">Provedor</label><select id="ai-provider">
+            <option value="openai">OpenAI</option><option value="claude">Claude · Anthropic</option>
+            <option value="gemini">Gemini · Google</option><option value="groq">Groq</option>
+            <option value="deepseek">DeepSeek</option><option value="ollama">Ollama local</option>
+          </select></div>
+          <div><label for="ai-model">Modelo de IA</label>
+            <input id="ai-model" maxlength="160" required aria-describedby="ai-instructions"></div>
+        </div>
+        <div id="ai-key-field">
+          <label for="ai-key">Chave de API</label>
+          <input id="ai-key" type="password" maxlength="512" autocomplete="off" spellcheck="false" required>
+        </div>
+        <div id="ai-instructions" class="help">
+          <p id="ai-cloud-help">Crie uma chave no painel do provedor e copie o identificador de um modelo habilitado na sua conta.
+            <a id="ai-key-link" href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">Gerenciar chaves</a></p>
+          <p id="ai-ollama-help" hidden>Instale o Ollama, baixe um modelo com <code>ollama pull nome-do-modelo</code> e mantenha o serviço rodando. Copie o nome exibido por <code>ollama list</code>.
+            <a href="https://ollama.com/download/windows" target="_blank" rel="noopener noreferrer">Baixar Ollama para Windows</a></p>
+        </div>
+        <p class="help">O teste usa mensagens de exemplo e pode consumir cota do provedor. A configuração vale até recarregar ou fechar esta página.</p>
+        <button type="submit">Testar e ativar modelo</button>
+        <button type="button" id="ai-clear" class="secondary-action">Remover modelo da sessão</button>
+        <p id="ai-status" role="status"></p>
+        <p id="ai-error" role="alert" hidden></p>
+      </form>
+    </section>
+    <header class="intro workspace-intro">
+      <div>
+        <h1>Explore seus dados</h1>
+        <p>Importe uma tabela, confira as colunas e calcule um indicador ou faça uma pergunta à IA.</p>
+      </div>
+      <svg class="signal-mark" viewBox="0 0 260 110" fill="none" aria-hidden="true">
+        <path class="signal-grid" d="M10 23h240M10 56h240M10 89h240M38 10v90M92 10v90M146 10v90M200 10v90"/>
+        <path class="signal-shadow" d="m10 88 52-31 39 17 50-37 32 12 61-33"/>
+        <path class="signal-line" pathLength="1" d="m10 88 52-31 39 17 50-37 32 12 61-33"/>
+        <g class="signal-points"><circle cx="62" cy="57" r="4"/><circle cx="151" cy="37" r="4"/><circle cx="244" cy="16" r="5"/></g>
+      </svg>
+    </header>
+    <section id="table-explorer" aria-labelledby="import-heading">
+      <div class="import-zone">
+      <div class="import-fields">
+      <h2 id="import-heading">Importar tabela</h2>
+      <p class="help" id="table-format">CSV ou Excel (.xlsx), até 1 MiB.</p>
+      <label for="table-file">Arquivo CSV ou Excel</label>
+      <input id="table-file" type="file" accept=".csv,.xlsx" aria-describedby="table-format">
+      <label for="table-header">Linha com os nomes das colunas</label>
+      <input id="table-header" type="number" min="1" max="100" value="1">
+      </div>
+      <div class="example-zone">
+      <h2>Experimente o caso de qualidade</h2>
+      <p class="help">Revise uma duplicata, monte um painel e investigue uma mudança na taxa de rejeição.</p>
+      <button type="button" id="quality-example">Experimentar com dados de exemplo</button>
+      </div>
+      <p class="help">Para indicadores de vendas, use o <a href="/modelo-vendas.csv" download>CSV modelo de vendas</a>.</p>
+      </div>
+      <div id="table-sheet-field" hidden><label for="table-sheet">Aba do Excel</label><select id="table-sheet"></select></div>
+      <p id="table-status" role="status"></p>
+      <p id="table-error" role="alert" hidden></p>
+      <div id="table-ready" hidden>
+        <nav class="workflow" aria-label="Etapas da análise">
+          <button type="button" data-step="data" aria-pressed="true">Dados</button>
+          <button type="button" data-step="prep" aria-pressed="false">Preparação</button>
+          <button type="button" data-step="indicators" aria-pressed="false">Indicadores</button>
+          <button type="button" data-step="investigate" aria-pressed="false">Investigação</button>
+        </nav>
+        <p id="workspace-source" class="help"></p>
+        <section id="guided-case" class="panel" hidden aria-labelledby="guided-title">
+          <h2 id="guided-title">Caso guiado de qualidade industrial</h2>
+          <p id="guided-copy"></p>
+          <button type="button" id="guided-next"></button>
+        </section>
+        <div data-area="data">
+        <h2>Prévia dos dados</h2>
+        <div id="table-preview" class="table-wrap"></div>
+        <a id="use-sales" href="#sales" hidden>Usar esta tabela em Indicadores de vendas</a>
+        <details>
+          <summary>Combinar com outro arquivo</summary>
+          <p class="help">As linhas do segundo arquivo entram abaixo das atuais. A coluna Arquivo de origem identifica cada fonte.</p>
+          <label for="combine-file">Segundo CSV ou Excel</label><input id="combine-file" type="file" accept=".csv,.xlsx">
+          <label for="combine-header">Linha do cabeçalho do segundo arquivo</label><input id="combine-header" type="number" min="1" max="100" value="1">
+          <div id="combine-sheet-field" hidden><label for="combine-sheet">Aba do segundo arquivo</label><select id="combine-sheet"></select></div>
+          <p id="combine-status" role="status"></p>
+          <div id="combine-map" class="controls"></div>
+          <button type="button" id="combine-apply" hidden>Combinar arquivos</button>
+          <button type="button" id="combine-clear" hidden>Voltar ao arquivo original</button>
+        </details>
+        <details>
+          <summary>Reaplicar receita de análise</summary>
+          <p class="help">Importe uma receita JSON para conferir e reaplicar correções, indicadores, metas e filtros.</p>
+          <label for="recipe-file">Arquivo da receita</label><input id="recipe-file" type="file" accept=".json,application/json">
+          <p id="recipe-summary" role="status"></p>
+          <button type="button" id="recipe-apply" hidden>Aplicar receita</button>
+        </details>
+        </div>
+        <div data-area="prep" hidden>
+        <details id="preparation">
+          <summary>Ver problemas na tabela</summary>
+          <p id="diagnosis-summary"></p>
+          <div id="diagnosis-values" class="table-wrap"></div>
+        </details>
+        <details>
+          <summary>Corrigir dados</summary>
+          <form id="table-treatment">
+            <div class="controls">
+              <div><label for="treatment-op">Correção</label><select id="treatment-op">
+                <option value="number">Padronizar números decimais</option>
+                <option value="date">Converter datas para AAAA-MM-DD</option>
+                <option value="category">Padronizar espaços e maiúsculas de categorias</option>
+                <option value="duplicates">Remover linhas idênticas</option>
+              </select></div>
+              <div id="treatment-column-field"><label for="treatment-column">Coluna</label><select id="treatment-column"></select></div>
+            </div>
+            <button type="submit">Ver prévia da correção</button>
+          </form>
+          <div id="treatment-preview" hidden>
+            <p id="treatment-summary"></p>
+            <div id="treatment-values" class="table-wrap"></div>
+            <button type="button" id="treatment-apply">Aplicar correção</button>
+          </div>
+          <h3>Correções aplicadas</h3>
+          <ol id="treatment-log"></ol>
+          <button type="button" id="treatment-reset" hidden>Desfazer todas as correções</button>
+        </details>
+        </div>
+        <div data-area="indicators" hidden>
+        <details>
+          <summary>Sugestões de indicadores com IA</summary>
+          <p class="help">A IA recebe o perfil das colunas. Confira a fórmula e a definição antes de calcular.</p>
+          <button type="button" id="suggest-indicators">Sugerir indicadores</button>
+          <div id="suggestion-list"></div>
+        </details>
+        <form id="table-manual">
+          <h2>Cálculo manual</h2>
+          <div class="controls">
+            <div><label for="table-op">Tipo de cálculo</label><select id="table-op">
+              <option value="count">Contar linhas</option><option value="sum">Soma</option>
+              <option value="mean">Média</option><option value="median">Mediana</option>
+              <option value="min">Mínimo</option><option value="max">Máximo</option>
+              <option value="missing">Valores ausentes</option><option value="ratio">Taxa (%)</option>
+            </select></div>
+            <div><label for="table-column">Coluna da métrica</label><select id="table-column"></select></div>
+            <div><label for="table-group">Separar resultados por</label><select id="table-group"></select></div>
+            <div id="table-denominator-field" hidden><label for="table-denominator">Coluna do denominador</label><select id="table-denominator"></select></div>
+          </div>
+          <button type="submit">Calcular indicador</button>
+        </form>
+        <div id="indicator-result-slot">
+        <section id="table-result" hidden aria-live="polite">
+          <h2 id="table-result-title">Resultado do cálculo</h2>
+          <p id="table-method"></p>
+          <div id="table-values" class="table-wrap"></div>
+          <button type="button" id="pin-indicator" hidden>Adicionar indicador ao painel</button>
+        </section>
+        </div>
+        <section id="indicator-board" aria-labelledby="board-title">
+          <h2 id="board-title">Painel de indicadores</h2>
+          <button type="button" id="recipe-save" class="secondary-action">Salvar receita de análise</button>
+          <p id="board-source" class="help"></p>
+          <button type="button" id="quality-plans" hidden>Adicionar indicadores do exemplo</button>
+          <p id="board-empty">Calcule um indicador e escolha adicioná-lo ao painel.</p>
+          <form id="board-filters" hidden>
+            <div class="controls">
+              <div><label for="board-column">Coluna do filtro</label><select id="board-column"></select></div>
+              <div id="board-value-field" hidden><label for="board-value">Valor a incluir</label><input id="board-value" list="board-values"><datalist id="board-values"></datalist></div>
+              <div id="board-month-field"><label for="board-month">Mês</label><select id="board-month"></select></div>
+            </div>
+            <button>Aplicar filtros</button>
+          </form>
+          <div id="board-cards" aria-live="polite"></div>
+        </section>
+        </div>
+        <div data-area="investigate" hidden>
+        <form id="table-ask">
+          <label for="table-question">Pergunta para a IA</label>
+          <input id="table-question" maxlength="1000" required placeholder="Ex. Qual linha tem maior taxa de rejeição?">
+          <p class="help">A API recebe sua pergunta e o perfil das colunas. O cálculo usa o arquivo local.</p>
+          <label><input id="ask-scope" type="checkbox"> Usar o recorte atual do painel</label>
+          <button type="submit">Propor plano de análise</button>
+        </form>
+        <form id="review-plan" hidden>
+          <h2>Revise o plano da IA</h2>
+          <p id="plan-scope" class="help"></p>
+          <div id="plan-fields" class="controls"></div>
+          <p id="plan-method" class="help"></p>
+          <p class="help">Soma, média, mediana, mínimo e máximo ignoram células vazias. A taxa usa pares preenchidos. Denominador zero deixa a taxa indisponível.</p>
+          <button type="submit">Executar plano revisado</button>
+        </form>
+        <div id="investigation-result-slot"></div>
+        <section id="quality-investigation" aria-labelledby="quality-title">
+          <h2 id="quality-title">Comparação da taxa de rejeição</h2>
+          <p class="help" id="quality-help">Disponível em tabelas com Data, Linha, Rejeitados e Inspecionados.</p>
+          <form id="quality-form" hidden>
+            <div class="controls">
+              <div><label for="quality-before">Mês anterior</label><select id="quality-before"></select></div>
+              <div><label for="quality-after">Mês atual</label><select id="quality-after"></select></div>
+            </div>
+            <button>Comparar taxas de rejeição</button>
+            <p id="quality-error" role="alert" hidden></p>
+          </form>
+          <div id="quality-result" aria-live="polite"></div>
+          <button type="button" id="explain-quality" hidden>Explicar este resultado com IA</button>
+        </section>
+        </div>
+      </div>
+    </section>
+    <section id="sales" aria-labelledby="sales-title">
+    <header class="sales-heading">
+      <h2 id="sales-title">O que mudou nas vendas?</h2>
+      <p class="help">Compare receita, pedidos e ticket médio. Confira os números e as consultas SQL.</p>
+    </header>
+    <form id="investigation" class="panel">
+      <div class="controls">
+        <div><label for="mode">Como analisar as vendas</label>
+        <select id="mode"><option value="demo">Ver demonstração gravada</option><option value="live">Perguntar à IA sobre o exemplo</option><option value="csv" disabled>Comparar vendas do CSV importado</option></select></div>
+        <div id="demo-field"><label for="example">Cenário</label><select id="example"></select></div>
+        <div id="live-field" hidden><label for="question">Pergunta para o agente</label>
+          <input id="question" maxlength="1000" placeholder="Ex. Por que a receita caiu em setembro?"></div>
+      </div>
+      <div id="csv-field" hidden>
+        <p id="sales-source" class="help"></p>
+        <p class="help"><a href="#workspace">Trocar arquivo em Explorar dados</a></p>
+        <div id="csv-preview" hidden>
+          <p id="csv-summary" role="status"></p>
+          <div class="controls">
+            <div><label for="csv-previous">Mês anterior</label><select id="csv-previous"></select></div>
+            <div><label for="csv-current">Mês atual</label><select id="csv-current"></select></div>
+          </div>
+        </div>
+      </div>
+      <p class="help" id="mode-help">Respostas gravadas com consultas executadas sobre a base local.</p>
+      <button id="run" type="submit">Ver resultado do cenário</button>
+      <p id="status" role="status"></p>
+      <p id="error" role="alert" hidden></p>
+    </form>
+    <section id="result" aria-labelledby="result-heading" hidden>
+      <div class="section-title"><h2 id="result-heading">Resultado de vendas</h2><span id="source" class="badge"></span></div>
+      <p id="asked" class="help"></p>
+      <p id="answer" class="panel answer"></p>
+      <div id="kpis" class="kpis"></div>
+      <div id="contributions"></div>
+      <section id="evidence-section">
+        <h2>Evidências da investigação</h2>
+        <div id="evidence"></div>
+      </section>
+    </section>
+    </section>
+  </main>
+</body>
+</html>

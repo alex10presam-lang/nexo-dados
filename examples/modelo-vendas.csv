@@ -1,0 +1,5 @@
+order_id,order_date,category,region,quantity,unit_price_cents
+A01,2025-08-03,Eletrônicos,Norte,1,60000
+A02,2025-08-04,Papelaria,Sudeste,2,20000
+S01,2025-09-03,Eletrônicos,Norte,1,45000
+S02,2025-09-04,Papelaria,Sudeste,2,17500

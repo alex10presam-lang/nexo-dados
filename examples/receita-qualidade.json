@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "rules": [{"operation": "duplicates"}],
+  "indicators": [
+    {"title": "Taxa por linha", "plan": {"operation": "ratio", "column": "Rejeitados", "denominator": "Inspecionados", "group": "Linha"}, "chart": "bar", "target": "3"},
+    {"title": "Evolução mensal da rejeição", "plan": {"operation": "ratio", "column": "Rejeitados", "denominator": "Inspecionados", "group": "Data", "monthly": true}, "chart": "line", "target": "3"}
+  ],
+  "scope": {}
+}
