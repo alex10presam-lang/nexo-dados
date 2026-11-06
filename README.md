@@ -2,9 +2,11 @@
 
 **Análise de planilhas com indicadores auditáveis e assistência de IA.**
 
+**Python · SQLite · JavaScript · HTML/CSS · openpyxl opcional**
+
 Importe CSV ou Excel, revise problemas de qualidade, monte indicadores e investigue mudanças com acesso às fórmulas e aos dados do recorte.
 
-[Rodar localmente](#rodar-a-demonstração) · [Caso de qualidade industrial](#caso-de-portfólio--qualidade-industrial) · [Como a IA participa](#como-a-ia-participa) · [Testes](#casos-reproduzíveis)
+[Rodar localmente](#rodar-a-demonstração) · [Caso de qualidade industrial](#caso-de-portfólio--qualidade-industrial) · [Como a IA participa](#como-a-ia-participa) · [Arquitetura](#estrutura-do-projeto) · [Testes](#casos-reproduzíveis) · [Escopo e limites](#escopo-e-limites)
 
 ![Demonstração guiada da limpeza, do painel e da investigação da linha A](docs/demo-qualidade.gif)
 
@@ -20,6 +22,19 @@ Importe CSV ou Excel, revise problemas de qualidade, monte indicadores e investi
 4. Clique na linha A do ranking ou em **Investigar linha A**. De agosto para setembro de 2025, a taxa passou de 3% para 8%, um aumento de 5 pontos percentuais. Use **Exportar recorte e evidências** para salvar os registros, a fórmula e os totais em CSV.
 
 O painel também aceita indicadores calculados manualmente ou sugeridos pela IA. Use **Adicionar indicador ao painel** e recalcule o conjunto com um filtro de valor exato e, quando houver uma coluna Data, um mês. Os indicadores fixados duram enquanto a tabela estiver aberta.
+
+## O que este projeto demonstra
+
+| Frente | Implementação |
+|---|---|
+| Preparação de dados | Importação de CSV/Excel, diagnóstico, prévia de correções, remoção de duplicatas e combinação de arquivos. |
+| Indicadores auditáveis | Cálculos locais com fórmula, numerador, denominador e registros do recorte para conferência. |
+| Investigação | Comparação entre períodos, variação em pontos percentuais e contribuição de cada grupo. |
+| Reutilização | Receitas em JSON para reaplicar correções, fórmulas, metas e filtros em outra tabela. |
+| Visualização | Indicadores agrupados, gráficos de barras e linhas, filtros e exportação em SVG. |
+| IA opcional | Propostas de análise revisadas pelo usuário; argumentos validados antes do cálculo local. |
+
+A demonstração separa a sugestão de uma análise da execução do cálculo. Os exemplos de qualidade e vendas permitem conferir resultados concretos mesmo sem configurar um modelo de IA.
 
 ## Configuração de IA
 
@@ -119,3 +134,16 @@ python -m unittest discover -s tests -v
 ```
 
 Os testes cobrem a base, as métricas, o fluxo do agente com um modelo simulado e a demonstração pelo servidor local. A base contém vendas sintéticas com dois itens por pedido. A receita é bruta e os pedidos são contados por ID distinto.
+
+## Escopo e limites
+
+Este é um projeto independente de portfólio. Os exemplos e as capturas utilizam dados sintéticos; os resultados apresentados são reproduzíveis e não representam o desempenho de uma empresa.
+
+- **Execução local:** o servidor atende em `127.0.0.1`, sem autenticação de usuários ou ambiente colaborativo. Não é uma implantação pública para receber arquivos de terceiros.
+- **Persistência:** a demonstração de vendas usa SQLite temporário. Os indicadores fixados pertencem à tabela aberta; exporte uma receita para reaplicar a configuração.
+- **Arquivos:** a exploração de tabelas aceita até 1 MiB; o fluxo específico de vendas aceita CSV de até 256 KiB. A leitura de Excel requer a dependência opcional indicada acima.
+- **Uso de IA:** a demonstração funciona sem credenciais. Ao ativar um provedor externo, parte do contexto da análise é enviada conforme o fluxo descrito neste README. Use dados de teste ou informações cuja transmissão você tenha autorizado.
+- **Validação:** os testes usam modelos simulados. A avaliação com provedores e credenciais reais deve ser executada no ambiente de quem utilizar o recurso; não há garantia de compatibilidade com todos os modelos.
+- **Interpretação:** o cálculo identifica variações e contribuições matemáticas. A conclusão sobre causa raiz depende de evidências adicionais.
+
+Não há licença aberta declarada neste repositório. A apresentação do código para consulta não concede automaticamente autorização de redistribuição ou uso comercial.
