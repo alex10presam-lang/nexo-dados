@@ -12,6 +12,13 @@ Importe CSV ou Excel, revise problemas de qualidade, monte indicadores e investi
 
 **O caso em 30 segundos.** Depois de revisar e remover um registro duplicado, o painel calcula uma taxa geral de rejeição de **4% em 600 itens inspecionados**. A investigação da linha A mostra a taxa subir de **3% para 8%** entre agosto e setembro. O CSV exportado registra os totais e a fórmula que sustentam a comparação. O exemplo usa dados sintéticos e roda sem chave de API.
 
+## Leitura rápida do projeto
+
+- **Foco:** análise de dados, qualidade de bases e indicadores explicáveis.
+- **Evidência técnica:** [tratamento de tabelas](tabular.py), [receitas e comparações](portfolio.py) e [testes dos indicadores](tests/test_portfolio.py).
+- **Para avaliar:** execute o [caso de qualidade industrial](#caso-de-portfólio--qualidade-industrial) e confira a fórmula e os registros usados no resultado.
+- **Estado:** demonstração local com dados sintéticos; IA opcional, com avaliação ao vivo ainda dependente de credenciais.
+
 ## Caso de portfólio · qualidade industrial
 
 ![Painel de qualidade com taxa de rejeição, volume, evolução mensal e ranking](docs/qualidade.jpg)
