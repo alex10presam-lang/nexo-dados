@@ -6,18 +6,16 @@
 
 Importe CSV ou Excel, revise problemas de qualidade, monte indicadores e investigue mudanças com acesso às fórmulas e aos dados do recorte.
 
-[Rodar localmente](#rodar-a-demonstração) · [Caso de qualidade industrial](#caso-de-portfólio--qualidade-industrial) · [Como a IA participa](#como-a-ia-participa) · [Arquitetura](#estrutura-do-projeto) · [Testes](#casos-reproduzíveis) · [Escopo e limites](#escopo-e-limites)
+## Como avaliar o projeto
+
+[Executar a demonstração](#rodar-a-demonstração)
+
+A demonstração abre sem chave de API. Remova uma duplicata, confira a taxa de rejeição de 4% em 600 itens e exporte as evidências da comparação entre meses.
+
+- **Código e testes.** [tratamento de tabelas](tabular.py), [receitas e comparações](portfolio.py) e [testes dos indicadores](tests/test_portfolio.py).
+- **Escopo.** Demonstração local com dados sintéticos; IA opcional, com avaliação ao vivo ainda dependente de credenciais.
 
 ![Demonstração guiada da limpeza, do painel e da investigação da linha A](docs/demo-qualidade.gif)
-
-**O caso em 30 segundos.** Depois de revisar e remover um registro duplicado, o painel calcula uma taxa geral de rejeição de **4% em 600 itens inspecionados**. A investigação da linha A mostra a taxa subir de **3% para 8%** entre agosto e setembro. O CSV exportado registra os totais e a fórmula que sustentam a comparação. O exemplo usa dados sintéticos e roda sem chave de API.
-
-## Leitura rápida do projeto
-
-- **Foco:** análise de dados, qualidade de bases e indicadores explicáveis.
-- **Evidência técnica:** [tratamento de tabelas](tabular.py), [receitas e comparações](portfolio.py) e [testes dos indicadores](tests/test_portfolio.py).
-- **Para avaliar:** execute o [caso de qualidade industrial](#caso-de-portfólio--qualidade-industrial) e confira a fórmula e os registros usados no resultado.
-- **Estado:** demonstração local com dados sintéticos; IA opcional, com avaliação ao vivo ainda dependente de credenciais.
 
 ## Caso de portfólio · qualidade industrial
 
